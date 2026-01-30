@@ -1,108 +1,111 @@
-# Autopilot — Analytics Engineering kit for Cursor
+# Autopilot — Kit de Analytics Engineering para Cursor
 
-Autopilot reduces manual AE work in large dbt environments by safely executing repetitive, well-scoped tasks end-to-end. It is **Cursor-native**: Commands, Agents, and Skills live in `.cursor/` and work with Cursor’s Agent (Composer).
+O Autopilot reduz trabalho manual de AE em ambientes dbt grandes, executando tarefas repetitivas e bem escopadas de ponta a ponta. É **nativo do Cursor**: Commands, Agents e Skills ficam em `.cursor/` e funcionam com o Agent (Composer) do Cursor.
 
-**Spec:** Full behavior is defined in **@docs** — `00_project_overview.md`, `01_task_classification.md`, `02_autopilot_commands.md`, `03_failures_git_state.md`.
+**Spec:** O comportamento completo está em **@docs** — `00_project_overview.md`, `01_task_classification.md`, `02_autopilot_commands.md`, `03_failures_git_state.md`.
 
----
-
-## Install (share & onboard)
-
-**Option A — AI-assisted install (recommended for new users)**
-
-1. Send to Cursor or any AI: *"Follow this guide and install Autopilot for me: [link to this repo or to autopilot/INSTALL.md]"*
-2. The AI will ask **Project only or global?** then copy the kit. Full instructions for the AI are in **[INSTALL.md](INSTALL.md)**.
-
-**Option B — Script install**
-
-Run from repo root: `./autopilot/install.sh` — prompts for **Project (current dir) or Global (~/.cursor/)** then copies. Non-interactive: `./autopilot/install.sh --project` or `--global`.
-
-**Option C — Copy into your dbt repo (manual)**
-
-1. Copy the **`.cursor/`** folder from this `autopilot/` directory into your **dbt project root**.
-2. In Cursor, open your dbt project. Commands and skills are available immediately.
-3. In chat, reference the spec with **@docs** (attach the repo’s `docs/` folder) so the agent has the full Autopilot spec.
-
-**Option D — Clone the whole repo**
-
-1. Clone this repo.
-2. In Cursor, **File → Open Folder** and open the cloned repo (or your dbt repo with `autopilot/.cursor/` copied in).
-3. Use **@docs** to attach `docs/` for the spec.
-
-**Option E — Team shared repo**
-
-1. Create a team repo that contains only `autopilot/.cursor/` (or this full repo).
-2. New members: clone the repo and copy `autopilot/.cursor/` into their dbt project root.
-3. Document in your team wiki: “Copy `autopilot/.cursor/` into your dbt repo; in Cursor use @docs for the spec.”
+**Equipe em PT-BR:** commits e PRs são feitos em **português brasileiro**. Os comandos e agentes já estão configurados para isso.
 
 ---
 
-## Quick start
+## Instalação (compartilhar e onboarding)
 
-1. **One command (default):** In Cursor chat, type `/launch TSK-123` (replace with your JIRA task ID).  
-   The agent runs: pull → plan → execute-plan → review → pr.
+**Opção A — Instalação assistida por IA (recomendado para novos usuários)**
 
-2. **Step by step:**  
-   - `/pull TSK-123` — Fetch task, sync release branch, create branch `TSK-123`.  
-   - `/plan` — Classify (L0–L3), generate plan if needed.  
-   - `/execute-plan` — Execute work (use `--phase=1` or `--all` for L3).  
-   - `/review` — Run dbt build/tests; block PR if failures.  
-   - `/pr` — Open PR (template); Autopilot never merges.
+1. Envie para o Cursor ou qualquer IA: *"Siga este guia e instale o Autopilot para mim: [link deste repo ou autopilot/INSTALL.md]"*
+2. A IA pergunta **Só este projeto ou global?** e copia o kit. As instruções completas para a IA estão em **[INSTALL.md](INSTALL.md)**.
 
-3. **Help:** `/help` — Show command reference.
+**Opção B — Instalação por script**
 
----
+Rode na raiz do repo: `./autopilot/install.sh` — pergunta **Projeto (diretório atual) ou Global (~/.cursor/)** e copia. Não interativo: `./autopilot/install.sh --project` ou `--global`.
 
-## What’s inside `.cursor/`
+**Opção C — Copiar manualmente no repo dbt**
 
-| Folder     | Contents |
-|-----------|----------|
-| `commands/` | `pull`, `plan`, `execute-plan`, `review`, `pr`, `launch`, `help` — slash commands. |
-| `agents/`   | `classifier`, `planner`, `executor`, `verifier` — subagents the main Agent can delegate to. |
-| `skills/`   | `task-pull`, `classification`, `dbt-validate`, `pr-template` — reusable skills for task init, classification, validation, PR. |
-| `rules/`    | `autopilot.mdc` — guardrails (no `git add .`, one task one branch, PR is contract, never merge); applied when editing SQL/models or `.autopilot/`. |
+1. Copie a pasta **`.cursor/`** deste diretório `autopilot/` para a **raiz do seu projeto dbt**.
+2. No Cursor, abra o projeto dbt. Os comandos e skills ficam disponíveis na hora.
+3. No chat, use **@docs** (anexe a pasta `docs/` do repo) para o agente ter a spec completa do Autopilot.
 
-All commands and skills reference **@docs** for the full spec (principles, Git rules, failure modes, state).
+**Opção D — Clonar o repo inteiro**
 
----
+1. Clone este repo.
+2. No Cursor, **Arquivo → Abrir pasta** e abra o repo clonado (ou seu repo dbt com `autopilot/.cursor/` copiado).
+3. Use **@docs** para anexar a pasta `docs/` da spec.
 
-## PR template, SQL guidelines, and other guides
+**Opção E — Repo compartilhado do time**
 
-**These live in your dbt project repo**, not in this kit. Autopilot reads them from the workspace when you run `/pr` or `/review`. Put them in your dbt repo, for example:
-
-- **PR template:** `.github/PULL_REQUEST_TEMPLATE.md` or `docs/pr-template.md`
-- **SQL style guide:** `docs/sql-style.md` (or similar)
-- **Linter/config:** e.g. `.sqlfluff`, project docs
-
-If present, the agent uses them; if not, it falls back to built-in structure.
+1. Crie um repo do time com `autopilot/.cursor/` (ou este repo completo).
+2. Novos membros: clonam o repo e copiam `autopilot/.cursor/` para a raiz do projeto dbt.
+3. Documente no wiki do time: "Copie `autopilot/.cursor/` para o repo dbt; no Cursor use @docs para a spec."
 
 ---
 
-## Rules (from @docs)
+## Início rápido
 
-- **Git:** Never `git add .`; always stage explicit paths. One task → one branch; branch name = task ID.
-- **PR:** The PR is the contract; Autopilot never merges; human approval required.
-- **Stops:** On ambiguity, failure, or missing confirmation — stop and persist state in `.autopilot/`.
+1. **Um comando (padrão):** No chat do Cursor, digite `/launch TSK-123` (substitua pelo ID da tarefa JIRA).  
+   O agente roda: pull → plan → execute-plan → review → pr.
 
----
+2. **Passo a passo:**  
+   - `/pull TSK-123` — Busca tarefa, sincroniza branch de release, cria branch `TSK-123`.  
+   - `/plan` — Classifica (L0–L3), gera plano se necessário.  
+   - `/execute-plan` — Executa o trabalho (use `--phase=1` ou `--all` para L3).  
+   - `/review` — Roda dbt build/testes; bloqueia PR se houver falhas.  
+   - `/pr` — Abre PR (template); o Autopilot nunca faz merge.
 
-## Artifacts
-
-Autopilot writes under `.autopilot/` (create this if missing):
-
-- `task.json` — After pull (task metadata).
-- `classification.json` — After plan (L0–L3, rationale).
-- `state.json` — Progress, commits, summary, stage.
-- `plan.yml` — Only for L2/L3 tasks.
-
-Add `.autopilot/` to `.gitignore` if you prefer not to commit state (optional).
+3. **Ajuda:** `/help` — Mostra a referência de comandos.
 
 ---
 
-## Onboarding checklist (for your team)
+## O que tem dentro de `.cursor/`
 
-- [ ] Copy `autopilot/.cursor/` into the dbt project root.
-- [ ] In Cursor, open the dbt project and type `/help` to confirm commands appear.
-- [ ] Attach **@docs** (repo `docs/` folder) in chat when using Autopilot so the agent has the spec.
-- [ ] Run `/launch TSK-XXX` once with a real or test task to validate flow.
-- [ ] Ensure JIRA (or manual task input), Git, and dbt are available in the environment.
+| Pasta      | Conteúdo |
+|------------|----------|
+| `commands/` | `pull`, `plan`, `execute-plan`, `review`, `pr`, `launch`, `help` — comandos slash. |
+| `agents/`   | `classifier`, `planner`, `executor`, `verifier` — subagentes que o Agent pode delegar. |
+| `skills/`   | `task-pull`, `classification`, `dbt-validate`, `pr-template` — skills reutilizáveis para tarefa, classificação, validação, PR. |
+| `rules/`    | `autopilot.mdc` — guardrails (sem `git add .`, uma tarefa uma branch, PR é contrato, nunca merge); aplicado ao editar SQL/models ou `.autopilot/`. |
+
+Todos os comandos e skills referenciam **@docs** para a spec completa (princípios, regras de Git, modos de falha, estado).
+
+---
+
+## Template de PR, guia de SQL e outros guias
+
+**Ficam no repo do seu projeto dbt**, não neste kit. O Autopilot lê do workspace quando você roda `/pr` ou `/review`. Coloque no repo dbt, por exemplo:
+
+- **Template de PR:** `.github/PULL_REQUEST_TEMPLATE.md` ou `docs/pr-template.md`
+- **Guia de estilo SQL:** `docs/sql-style.md` (ou similar)
+- **Linter/config:** ex.: `.sqlfluff`, docs do projeto
+
+Se existirem, o agente usa; se não, usa a estrutura padrão.
+
+---
+
+## Regras (de @docs)
+
+- **Git:** Nunca `git add .`; sempre stage paths explícitos. Uma tarefa → uma branch; nome da branch = ID da tarefa.
+- **PR:** O PR é o contrato; o Autopilot nunca faz merge; aprovação humana obrigatória.
+- **Paradas:** Em ambiguidade, falha ou confirmação faltando — pare e persista estado em `.autopilot/`.
+- **Idioma:** Commits e PRs sempre em **PT-BR** (português brasileiro).
+
+---
+
+## Artefatos
+
+O Autopilot escreve em `.autopilot/` (crie se não existir):
+
+- `task.json` — Após pull (metadados da tarefa).
+- `classification.json` — Após plan (L0–L3, rationale).
+- `state.json` — Progresso, commits, resumo, estágio.
+- `plan.yml` — Só para tarefas L2/L3.
+
+Adicione `.autopilot/` ao `.gitignore` se preferir não versionar estado (opcional).
+
+---
+
+## Checklist de onboarding (para o time)
+
+- [ ] Copiar `autopilot/.cursor/` para a raiz do projeto dbt.
+- [ ] No Cursor, abrir o projeto dbt e digitar `/help` para confirmar que os comandos aparecem.
+- [ ] Anexar **@docs** (pasta `docs/` do repo) no chat ao usar o Autopilot para o agente ter a spec.
+- [ ] Rodar `/launch TSK-XXX` uma vez com uma tarefa real ou de teste para validar o fluxo.
+- [ ] Garantir que JIRA (ou entrada manual de tarefa), Git e dbt estão disponíveis no ambiente.
