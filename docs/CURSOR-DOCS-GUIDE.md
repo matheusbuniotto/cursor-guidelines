@@ -114,7 +114,8 @@ Run: `python scripts/validate.py`
   2. **Tools** — edit files, search codebase/web, run terminal, etc.
   3. **User messages** — your prompts and follow-ups
 
-- **Tools (summary):** Semantic search, search files/folders, web, fetch rules, read/edit files, run shell commands, browser, image generation, ask questions. No hard limit on tool calls per task.
+- **Tools (summary):** Semantic search, search files/folders, web, fetch rules, read/edit files, run shell commands, browser, image generation, **ask questions**. No hard limit on tool calls per task.
+- **Getting user input:** If the Agent exposes an **ask-user** / **AskUserQuestion-style** tool (e.g. "ask questions"), use it to prompt the user and wait for a reply—better than listing many questions in chat. Otherwise, ask **one question at a time in chat** and wait for the user's next message before continuing; do not dump all questions at once.
 - **Context:** Long chats get summarized; use `/summarize` to trigger summarization. Checkpoints let you undo Agent edits (separate from Git).
 
 ---

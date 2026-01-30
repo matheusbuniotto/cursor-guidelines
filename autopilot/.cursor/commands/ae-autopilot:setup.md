@@ -27,13 +27,24 @@ Cria ou atualiza `.autopilot/config.json` com dados do usuário, revisores, labe
    - If **editar** or user wants to change — ask: "Nome para commits:" and "Email para commits:" and use the answers.  
    If nothing was found, ask: "Nome para commits (git user.name):" and "Email para commits (git user.email):" and use the answers.
 
-3. **Collect remaining values (use AskUserQuestion or inline; PT-BR)**  
-   Ask the user for the following. Use defaults from existing config when present.
+   **2e. Auto-fill PR reviewers and team label from recent PRs (optional)**  
+   If the workspace is a git repo with a GitHub remote and `gh` is available: fetch the user's **last 3 PRs** (any state) and infer usual reviewers and team label.
+
+   - Run: `gh pr list --author @me --state all --limit 3 --json number` (from repo root; use `-R owner/repo` if needed). For each `number`, run: `gh pr view <number> --json labels,reviewRequests`.
+   - **Reviewers:** From each PR's `reviewRequests`, collect unique `login` values (field path: `reviewRequests[].login`). Deduplicate. If any logins were found, use as suggested default for `pr.default_reviewers`.
+   - **Team label:** From each PR's `labels`, collect `name` values. Pick the **most frequent** label, or the first that looks like a team label (e.g. contains "equipe", "team", "analytics", "squad"). Use as suggested default for `pr.team_label`. If none, leave unset.
+   - If `gh` fails or not in a GitHub repo, skip this step; you will ask for reviewers and label in step 3.
+   - When asking in step 3 for reviewers/label, if you have suggested values from 2e, show in PT-BR: "Encontrei nos seus últimos PRs: Revisores: [X]. Label: [Y]. Usar esses? (sim / editar)" — same confirm-or-edit flow as 2d.
+
+3. **Collect remaining values (ask user; PT-BR)**  
+   **How to ask:** If the Agent has an **ask-user / AskUserQuestion-style** tool (e.g. "ask questions" in Cursor Agent), use it so the user gets a clear prompt and can answer without scrolling. Otherwise, ask **one question at a time in chat** and wait for the user's reply before continuing; do not list all questions at once.
+
+   Use defaults from existing config when present; use suggested values from step 2e for reviewers and label when available.
 
    - **pr.default_reviewers** — Lista de usernames do GitHub para revisar PRs (e.g. `["lead-analytics"]`).  
-     Ask: "Revisor(es) padrão do PR (usernames GitHub, separados por vírgula):"
+     If no suggestion from 2e: ask "Revisor(es) padrão do PR (usernames GitHub, separados por vírgula):". If suggestion from 2e: "Encontrei nos seus últimos PRs: Revisores: [X]. Usar? (sim / editar)"
    - **pr.team_label** — Label do time no PR (e.g. "equipe-analytics").  
-     Ask: "Label do time para o PR (ex.: equipe-analytics):"
+     If no suggestion from 2e: ask "Label do time para o PR (ex.: equipe-analytics):". If suggestion from 2e: "Encontrei: Label: [Y]. Usar? (sim / editar)"
    - **jira.project_key** — Chave do projeto JIRA (e.g. "TSK").  
      Ask: "Chave do projeto JIRA (ex.: TSK):"
    - **jira.board_id** — ID do board JIRA, se relevante (opcional).  

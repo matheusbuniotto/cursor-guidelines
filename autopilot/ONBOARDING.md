@@ -27,7 +27,14 @@ Sem npm, sem CLI — só Cursor e essa pasta.
 
 ## 2. Configurar contexto (uma vez)
 
-Rode **`/ae-autopilot:setup`** no chat do Cursor. O agente tenta preencher **nome e email** automaticamente a partir do **gh** (GitHub CLI) ou do **GitHub MCP**; se encontrar, pergunta se você quer usar ou editar. Senão, pede:
+Rode **`/ae-autopilot:setup`** no chat do Cursor. O agente tenta preencher automaticamente:
+
+- **Nome e email** — a partir do **gh** (GitHub CLI), **git config** ou **GitHub MCP**; pergunta se quer usar ou editar.
+- **Revisores e label do PR** — a partir dos **seus últimos 3 PRs** no repo (via `gh pr list` + `gh pr view`); se encontrar, pergunta se quer usar ou editar. Se não estiver em um repo GitHub ou `gh` falhar, pede manualmente.
+
+O agente pode usar ferramenta de pergunta ao usuário (ask-user) ou fazer **uma pergunta por vez** no chat; responda antes de continuar.
+
+O que é coletado (com sugestões automáticas quando possível):
 
 - **Nome e email** — para commits (git user.name / user.email)
 - **Revisor(es) padrão do PR** — usernames do GitHub
