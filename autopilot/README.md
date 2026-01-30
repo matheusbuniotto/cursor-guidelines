@@ -51,7 +51,9 @@ Rode na raiz do repo: `./autopilot/install.sh` — pergunta **Projeto (diretóri
    - `/review` — Roda dbt build/testes; bloqueia PR se houver falhas.  
    - `/pr` — Abre PR (template); o Autopilot nunca faz merge.
 
-3. **Ajuda:** `/help` — Mostra a referência de comandos.
+3. **Config (onboarding):** `/setup` — Cria/atualiza `.autopilot/config.json` com nome, email, revisor(es) do PR, label do time, projeto/board JIRA e se, após abrir o PR, deve perguntar se move a tarefa para Review e comenta no JIRA. **Nome e email** podem ser preenchidos automaticamente a partir do **gh** (GitHub CLI), do **git config** ou do **GitHub MCP**, se disponíveis. Rode uma vez (ou quando mudar).
+
+4. **Ajuda:** `/help` — Mostra a referência de comandos.
 
 ---
 
@@ -59,12 +61,26 @@ Rode na raiz do repo: `./autopilot/install.sh` — pergunta **Projeto (diretóri
 
 | Pasta      | Conteúdo |
 |------------|----------|
-| `commands/` | `pull`, `plan`, `execute-plan`, `review`, `pr`, `launch`, `help` — comandos slash. |
+| `commands/` | `setup`, `pull`, `plan`, `execute-plan`, `review`, `pr`, `launch`, `help` — comandos slash. |
 | `agents/`   | `classifier`, `planner`, `executor`, `verifier` — subagentes que o Agent pode delegar. |
 | `skills/`   | `task-pull`, `classification`, `dbt-validate`, `pr-template` — skills reutilizáveis para tarefa, classificação, validação, PR. |
 | `rules/`    | `autopilot.mdc` — guardrails (sem `git add .`, uma tarefa uma branch, PR é contrato, nunca merge); aplicado ao editar SQL/models ou `.autopilot/`. |
 
 Todos os comandos e skills referenciam **@docs** para a spec completa (princípios, regras de Git, modos de falha, estado).
+
+---
+
+## Config (contexto do usuário)
+
+O **`.autopilot/config.json`** guarda contexto de onboarding (nome, email, revisor do PR, label do time, JIRA). É criado/atualizado pelo comando **`/setup`**. Campos principais:
+
+- **user.name**, **user.email** — usados em commits (e em `/pull` para configurar git no repo).
+- **pr.default_reviewers**, **pr.team_label** — usados em `/pr` (revisores e label).
+- **jira.project_key**, **jira.board_id**, **jira.review_status** — para referência; **jira.comment_after_pr** — se após abrir o PR devemos perguntar se move a tarefa para Review e comenta no JIRA (resumo + link do PR em PT-BR).
+
+Exemplo de schema: **`autopilot/config.example.json`** no repo. Se não quiser versionar dados pessoais, adicione `.autopilot/config.json` ao `.gitignore`.
+
+**Após abrir o PR:** Se configurado (ou por padrão), o agente pergunta: "Deseja que eu mova a tarefa JIRA para Review e comente na tarefa o que foi feito + link do PR?" Se sim, usa JIRA API/MCP se disponível; senão, entrega o texto do comentário (PT-BR) para o usuário colar manualmente.
 
 ---
 
@@ -93,12 +109,13 @@ Se existirem, o agente usa; se não, usa a estrutura padrão.
 
 O Autopilot escreve em `.autopilot/` (crie se não existir):
 
+- `config.json` — Criado/atualizado por `/setup` (nome, email, revisor, label, JIRA). Opcional; muitas vezes no `.gitignore`.
 - `task.json` — Após pull (metadados da tarefa).
 - `classification.json` — Após plan (L0–L3, rationale).
 - `state.json` — Progresso, commits, resumo, estágio.
 - `plan.yml` — Só para tarefas L2/L3.
 
-Adicione `.autopilot/` ao `.gitignore` se preferir não versionar estado (opcional).
+Adicione `.autopilot/` (ou só `.autopilot/config.json`) ao `.gitignore` se preferir não versionar estado/dados pessoais (opcional).
 
 ---
 
@@ -106,6 +123,7 @@ Adicione `.autopilot/` ao `.gitignore` se preferir não versionar estado (opcion
 
 - [ ] Copiar `autopilot/.cursor/` para a raiz do projeto dbt.
 - [ ] No Cursor, abrir o projeto dbt e digitar `/help` para confirmar que os comandos aparecem.
+- [ ] Rodar **`/setup`** para criar `.autopilot/config.json` (nome, email, revisor, label, JIRA). Ver `config.example.json` no repo.
 - [ ] Anexar **@docs** (pasta `docs/` do repo) no chat ao usar o Autopilot para o agente ter a spec.
 - [ ] Rodar `/launch TSK-XXX` uma vez com uma tarefa real ou de teste para validar o fluxo.
 - [ ] Garantir que JIRA (ou entrada manual de tarefa), Git e dbt estão disponíveis no ambiente.

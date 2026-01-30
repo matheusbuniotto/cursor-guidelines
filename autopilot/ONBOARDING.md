@@ -25,16 +25,31 @@ Sem npm, sem CLI — só Cursor e essa pasta.
 
 ---
 
-## 2. Usar no Cursor
+## 2. Configurar contexto (uma vez)
+
+Rode **`/setup`** no chat do Cursor. O agente tenta preencher **nome e email** automaticamente a partir do **gh** (GitHub CLI) ou do **GitHub MCP**; se encontrar, pergunta se você quer usar ou editar. Senão, pede:
+
+- **Nome e email** — para commits (git user.name / user.email)
+- **Revisor(es) padrão do PR** — usernames do GitHub
+- **Label do time** — para o PR (ex.: equipe-analytics)
+- **Chave do projeto JIRA** — ex.: TSK
+- **Status JIRA "Em revisão"** — ex.: Review
+- **Após abrir PR, perguntar se move a tarefa para Review e comenta no JIRA?** — sim/não
+
+Isso gera o arquivo **`.autopilot/config.json`** no projeto. Se não quiser versionar dados pessoais, adicione `.autopilot/config.json` ao `.gitignore`. Ver `autopilot/config.example.json` no repo para o schema.
+
+---
+
+## 3. Usar no Cursor
 
 1. Abra o projeto dbt no Cursor.
 2. Abra o Agent (Composer): **Cmd+I** (Mac) ou **Ctrl+I** (Windows/Linux).
-3. No chat, digite **`/`** — você deve ver: `pull`, `plan`, `execute-plan`, `review`, `pr`, `launch`, `help`.
+3. No chat, digite **`/`** — você deve ver: `setup`, `pull`, `plan`, `execute-plan`, `review`, `pr`, `launch`, `help`.
 4. **Anexar a spec:** Se o time mantém a spec do Autopilot numa pasta `docs/`, digite **@docs** e selecione essa pasta para o agente ter as regras completas (Git, PR, classificação).
 
 ---
 
-## 3. Rodar a primeira tarefa
+## 4. Rodar a primeira tarefa
 
 **Fluxo completo (um comando):**
 
@@ -42,7 +57,8 @@ Sem npm, sem CLI — só Cursor e essa pasta.
 /launch TSK-123
 ```
 
-Substitua `TSK-123` pelo ID da tarefa no JIRA. O agente vai: pull → classificar → planejar (se precisar) → executar → review → abrir PR. **Título e descrição do PR e mensagens de commit serão em PT-BR.**
+Substitua `TSK-123` pelo ID da tarefa no JIRA. O agente vai: pull → classificar → planejar (se precisar) → executar → review → abrir PR. **Título e descrição do PR e mensagens de commit serão em PT-BR.**  
+Após abrir o PR, o agente pode perguntar se você quer **mover a tarefa JIRA para Review** e **comentar na tarefa** o que foi feito + link do PR (se configurado em `/setup`).
 
 **Passo a passo (se preferir):**
 
@@ -56,7 +72,7 @@ Substitua `TSK-123` pelo ID da tarefa no JIRA. O agente vai: pull → classifica
 
 ---
 
-## 4. Template de PR, guia de SQL e outros guias
+## 5. Template de PR, guia de SQL e outros guias
 
 **Ficam no repo do seu projeto dbt.** Coloque no mesmo repo onde você roda o Autopilot, por exemplo:
 
@@ -68,7 +84,7 @@ O Autopilot usa quando você roda `/pr` ou `/review`; se não existir, usa um fa
 
 ---
 
-## 5. Regras para lembrar
+## 6. Regras para lembrar
 
 - **Uma tarefa → uma branch.** Nome da branch = ID da tarefa (ex.: `TSK-123`).
 - **Nunca `git add .`** — o agente faz stage só de arquivos explícitos.
@@ -78,7 +94,7 @@ O Autopilot usa quando você roda `/pr` ou `/review`; se não existir, usa um fa
 
 ---
 
-## 6. Onde está a spec completa?
+## 7. Onde está a spec completa?
 
 A spec completa do Autopilot (princípios, classificação L0–L3, regras de Git, modos de falha) fica em **@docs** neste repo:
 
@@ -91,7 +107,7 @@ Use **@docs** no chat do Cursor ao trabalhar com o Autopilot para o agente ter o
 
 ---
 
-## 7. Precisa de ajuda?
+## 8. Precisa de ajuda?
 
 - Rode **`/help`** no chat para a referência de comandos.
 - Leia o **README.md** na pasta `autopilot/` para opções de instalação e artefatos.

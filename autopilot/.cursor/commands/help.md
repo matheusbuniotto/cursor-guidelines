@@ -8,6 +8,7 @@ Display this reference. Do not add project-specific analysis.
 
 | Command | Responsibility |
 |---------|----------------|
+| `/setup` | Onboarding: cria/atualiza `.autopilot/config.json` (nome, email, revisor, label, JIRA) |
 | `/pull TSK-123` | Pull JIRA task, sync release branch, create task branch `TSK-123` |
 | `/plan` | Classify task (L0–L3), generate plan if needed (L2 → plan.yml, L3 → phases) |
 | `/execute-plan` | Execute work; use `--phase=N` or `--all` for L3 |
@@ -23,6 +24,7 @@ Display this reference. Do not add project-specific analysis.
 
 ## Artifacts
 
+- `.autopilot/config.json` — user, reviewers, label, JIRA (from `/setup`; optional, often gitignored)
 - `.autopilot/task.json` — after pull
 - `.autopilot/classification.json` — after plan
 - `.autopilot/state.json` — progress, commits, summary

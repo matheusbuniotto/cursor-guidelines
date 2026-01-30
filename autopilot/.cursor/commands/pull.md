@@ -22,10 +22,18 @@ The user may provide a task ID (e.g. TSK-123) after the command: `/pull TSK-123`
    ```
    If branch already exists with uncommitted changes, **stop** and report (hard stop per @docs).
 
-5. **Persist state**  
+5. **Git user (from config)**  
+   If `.autopilot/config.json` exists and has `user.name` and `user.email`, set git config for this repo so commits use them:
+   ```bash
+   git config user.name "<user.name>"
+   git config user.email "<user.email>"
+   ```
+   (Only for the current repo; do not use `--global` unless the user asked.)
+
+6. **Persist state**  
    Ensure `.autopilot/` exists. Create or update `.autopilot/state.json` with task_id, branch, stage: "pull", timestamps.
 
-6. **Reply**  
+7. **Reply**  
    Summarize: task loaded, branch created. Next: run `/plan`.
 
 ## Git rules (non-negotiable)

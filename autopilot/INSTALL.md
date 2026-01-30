@@ -59,7 +59,7 @@ Ask the user **one by one** (or in one message):
 
 ### Step 4: Onboarding (one sentence)
 
-Say: *"To run a task: use **/launch TSK-123** (full flow) or **/pull**, **/plan**, **/execute-plan**, **/review**, **/pr** step by step. For full rules, attach **@docs** in chat (the repo’s docs folder)."*
+Say: *"Run **/setup** once to create `.autopilot/config.json` (name, email, PR reviewers, team label, JIRA). Then use **/launch TSK-123** (full flow) or **/pull**, **/plan**, **/execute-plan**, **/review**, **/pr** step by step. For full rules, attach **@docs** in chat (the repo’s docs folder)."*
 
 If they want more: point them to **autopilot/ONBOARDING.md** in the repo.
 

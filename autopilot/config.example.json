@@ -1,0 +1,16 @@
+{
+  "user": {
+    "name": "Seu Nome",
+    "email": "seu.email@empresa.com"
+  },
+  "pr": {
+    "default_reviewers": ["github-username"],
+    "team_label": "equipe-analytics"
+  },
+  "jira": {
+    "project_key": "TSK",
+    "board_id": "123",
+    "review_status": "Review",
+    "comment_after_pr": true
+  }
+}
