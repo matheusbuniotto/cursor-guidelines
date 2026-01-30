@@ -1,0 +1,27 @@
+---
+description: Autopilot guardrails — Git, PR, stops. Apply when using /pull, /plan, /execute-plan, /review, /pr, /launch.
+globs: ["**/*.sql", "**/models/**", "**/dbt_project.yml", ".autopilot/**"]
+---
+
+# Autopilot rules
+
+When executing Autopilot commands (pull, plan, execute-plan, review, pr, launch), follow the Autopilot spec. Full spec: **@docs** (00_project_overview, 01_task_classification, 02_autopilot_commands, 03_failures_git_state).
+
+**Idioma:** Commits e PRs são sempre em **português brasileiro (PT-BR)** — mensagens de commit, título e descrição do PR. A equipe de Analytics Engineering trabalha em PT-BR.
+
+## Git (non-negotiable)
+
+- **Never** `git add .` or `git add -A`. Always stage explicit paths, e.g. `git add models/silver/orders.sql models/silver/schema.yml`.
+- One JIRA task → one branch; branch name = task ID (e.g. `TSK-123`).
+- Atomic commits; message in PT-BR (e.g. "Feat - Adiciona campos X na obt Y", "Fix - Ajusta teste de freshness").
+- No `git push --force`, `git commit --amend`, or history rewriting.
+
+## PR
+
+- The Pull Request is the **primary artifact**. If it's not in the PR, it didn't happen.
+- Autopilot **never merges**. Human approval required before merge.
+- One task per PR; no mixed concerns.
+
+## Stops
+
+- On ambiguity, dbt failure outside expected scope, Git conflicts, or missing user confirmation: **stop**, persist state to `.autopilot/state.json`, and report. Do not proceed automatically.
