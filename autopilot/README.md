@@ -55,6 +55,8 @@ Rode na raiz do repo: `./autopilot/install.sh` — pergunta **Projeto (diretóri
 
 4. **Ajuda:** `/help` — Mostra a referência de comandos.
 
+**Guia mínimo para o time:** [COMO-INSTALAR.md](COMO-INSTALAR.md) — copiar `.cursor/` → abrir no Cursor → `/setup` → `/launch TSK-XXX`.
+
 ---
 
 ## O que tem dentro de `.cursor/`

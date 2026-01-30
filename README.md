@@ -37,7 +37,7 @@ Fluxo de **Analytics Engineering** para Cursor: JIRA → Git → dbt → PR. Ada
 - **[autopilot/README.md](autopilot/README.md)** — Opções de instalação (IA, script, manual), início rápido, artefatos, regras.
 - **[autopilot/ONBOARDING.md](autopilot/ONBOARDING.md)** — Onboarding de 5 min para novos membros (copiar `.cursor/`, primeira tarefa, regras).
 
-**Compartilhar com o time:** Envie o link do [autopilot/INSTALL.md](autopilot/INSTALL.md); novos usuários pedem para uma IA *"Siga este guia e instale para mim"* ou rodam `./autopilot/install.sh`. Depois sigam o ONBOARDING.md.
+**Compartilhar com o time:** Envie o link **[autopilot/COMO-INSTALAR.md](autopilot/COMO-INSTALAR.md)** — guia mínimo em PT-BR: copiar `.cursor/` → abrir no Cursor → `/setup` → `/launch TSK-XXX`. Ou [autopilot/INSTALL.md](autopilot/INSTALL.md) para instalação assistida por IA; [autopilot/ONBOARDING.md](autopilot/ONBOARDING.md) para detalhes.
 
 ---
 
