@@ -4,6 +4,18 @@ Guia mínimo para um membro do time instalar e começar a usar o Autopilot no Cu
 
 ---
 
+## Instalar com IA (uma frase)
+
+No Cursor (ou qualquer IA), cole isto no chat:
+
+```
+Siga este guia e instale o Autopilot para mim: https://github.com/matheusbuniotto/cursor-guidelines — copie a pasta autopilot/.cursor para a raiz deste projeto (instalação no projeto). Depois me lembre de rodar /ae-autopilot:setup uma vez e usar /ae-autopilot:launch TSK-XXX para uma tarefa.
+```
+
+A IA vai copiar o `.cursor/` para o seu projeto e lembrar de rodar `/ae-autopilot:setup` e `/ae-autopilot:launch TSK-XXX`.
+
+---
+
 ## 1. Copiar o kit para o seu projeto dbt
 
 **Opção A — Você tem o repo cursor-guidelines clonado**
@@ -24,7 +36,7 @@ cp -r /tmp/cursor-guidelines/autopilot/.cursor /caminho/do/seu/projeto/dbt/
 
 Abra o Cursor no seu projeto dbt, abra o Agent (Cmd+I / Ctrl+I) e digite:
 
-> Siga este guia e instale o Autopilot para mim: https://github.com/matheusbuniotto/cursor-guidelines (pasta autopilot, copiar .cursor para este projeto)
+> Siga este guia e instale o Autopilot para mim: https://github.com/matheusbuniotto/cursor-guidelines — copie a pasta autopilot/.cursor para a raiz deste projeto. Comandos: /ae-autopilot:setup, /ae-autopilot:launch TSK-XXX.
 
 A IA vai perguntar se é **só este projeto** ou **global**; escolha “este projeto” e ela copia o `.cursor/` para a raiz do seu projeto dbt.
 
@@ -36,12 +48,12 @@ Abra a pasta do **projeto dbt** no Cursor (File → Open Folder). O Autopilot us
 
 ---
 
-## 3. Configurar uma vez: `/setup`
+## 3. Configurar uma vez: `/ae-autopilot:setup`
 
 No chat do Cursor (Agent / Composer), digite:
 
 ```
-/setup
+/ae-autopilot:setup
 ```
 
 O agente vai:
@@ -65,7 +77,7 @@ Isso gera o arquivo `.autopilot/config.json`. Se não quiser versionar, adicione
 **Uma tarefa do início ao PR:**
 
 ```
-/launch TSK-123
+/ae-autopilot:launch TSK-123
 ```
 
 (Substitua `TSK-123` pelo ID da sua tarefa no JIRA.)
@@ -75,14 +87,14 @@ O agente faz: pull da tarefa → classifica → planeja (se precisar) → execut
 **Passo a passo (se preferir):**
 
 ```
-/pull TSK-123
-/plan
-/execute-plan
-/review
-/pr
+/ae-autopilot:pull TSK-123
+/ae-autopilot:plan
+/ae-autopilot:execute-plan
+/ae-autopilot:review
+/ae-autopilot:pr
 ```
 
-**Ajuda:** digite `/help` para ver todos os comandos.
+**Ajuda:** digite `/ae-autopilot:help` para ver todos os comandos.
 
 ---
 
@@ -92,8 +104,8 @@ O agente faz: pull da tarefa → classifica → planeja (se precisar) → execut
 |-------|-------------|
 | 1 | Copiar `autopilot/.cursor/` para a raiz do seu projeto dbt (ou pedir para uma IA instalar). |
 | 2 | Abrir o projeto dbt no Cursor. |
-| 3 | Rodar `/setup` uma vez (nome, email, revisor, label, JIRA). |
-| 4 | Rodar `/launch TSK-XXX` para uma tarefa (ou `/pull` → `/plan` → `/execute-plan` → `/review` → `/pr`). |
+| 3 | Rodar `/ae-autopilot:setup` uma vez (nome, email, revisor, label, JIRA). |
+| 4 | Rodar `/ae-autopilot:launch TSK-XXX` para uma tarefa (ou `/ae-autopilot:pull` → `/ae-autopilot:plan` → `/ae-autopilot:execute-plan` → `/ae-autopilot:review` → `/ae-autopilot:pr`). |
 
 **Repo do kit:** https://github.com/matheusbuniotto/cursor-guidelines
 

@@ -55,7 +55,7 @@ Ask the user **one by one** (or in one message):
 
 3. **Verify**
    - List what was copied (e.g. commands: pull, plan, execute-plan, review, pr, launch, help).
-   - Tell the user: *"In Cursor, open the project (or any project if global), then type **/** in chat — you should see Autopilot commands (e.g. pull, plan, launch). Run **/help** for the full list."*
+   - Tell the user: *"In Cursor, open the project (or any project if global), then type **/** in chat — you should see Autopilot commands (e.g. ae-autopilot:pull, ae-autopilot:plan, ae-autopilot:launch). Run **/ae-autopilot:help** for the full list."*
 
 ### Step 4: Onboarding (one sentence)
 

@@ -2,7 +2,7 @@
 
 **Spec:** @docs → `02_autopilot_commands.md` (§4), `00_project_overview.md` (§4.1–4.3), `03_failures_git_state.md` (Git rules).
 
-The user may provide a task ID (e.g. TSK-123) after the command: `/pull TSK-123`. If no ID, use AskUserQuestion to get the JIRA task ID or confirm they want to work without one (then still need branch name).
+The user may provide a task ID (e.g. TSK-123) after the command: `/ae-autopilot:pull TSK-123`. If no ID, use AskUserQuestion to get the JIRA task ID or confirm they want to work without one (then still need branch name).
 
 ## Steps
 
@@ -34,7 +34,7 @@ The user may provide a task ID (e.g. TSK-123) after the command: `/pull TSK-123`
    Ensure `.autopilot/` exists. Create or update `.autopilot/state.json` with task_id, branch, stage: "pull", timestamps.
 
 7. **Reply**  
-   Summarize: task loaded, branch created. Next: run `/plan`.
+   Summarize: task loaded, branch created. Next: run `/ae-autopilot:plan`.
 
 ## Git rules (non-negotiable)
 

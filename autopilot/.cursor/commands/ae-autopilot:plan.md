@@ -31,4 +31,4 @@ Classification **always** happens here. Planning is lazy: L0/L1 no plan file; L2
    Update `.autopilot/state.json`: stage "plan", classification level, plan path (if any), phases (if L3).
 
 6. **Reply**  
-   Report level and outcome (no plan / inline / plan.yml / phases). Next: `/execute-plan` (or `/execute-plan --phase=1` for L3).
+   Report level and outcome (no plan / inline / plan.yml / phases). Next: `/ae-autopilot:execute-plan` (or `/ae-autopilot:execute-plan --phase=1` for L3).

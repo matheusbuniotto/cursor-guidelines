@@ -2,7 +2,7 @@
 
 Cria ou atualiza `.autopilot/config.json` com dados do usuário, revisores, label do time e JIRA. Rode durante o onboarding ou quando mudar algo.
 
-**Spec:** Config usado por `/pull` (git user), `/pr` (reviewers, label, JIRA pós-PR). Ver `autopilot/config.example.json` para o schema.
+**Spec:** Config usado por `/ae-autopilot:pull` (git user), `/ae-autopilot:pr` (reviewers, label, JIRA pós-PR). Ver `autopilot/config.example.json` para o schema.
 
 ## Steps
 
@@ -65,4 +65,4 @@ Cria ou atualiza `.autopilot/config.json` com dados do usuário, revisores, labe
    Tell the user: "Se não quiser versionar dados pessoais, adicione `.autopilot/config.json` ao `.gitignore` (opcional)."
 
 6. **Reply**  
-   Confirm what was written. Next: run `/pull TSK-XXX` or `/launch TSK-XXX`.
+   Confirm what was written. Next: run `/ae-autopilot:pull TSK-XXX` or `/ae-autopilot:launch TSK-XXX`.

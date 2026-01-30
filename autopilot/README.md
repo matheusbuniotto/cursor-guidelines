@@ -41,21 +41,21 @@ Rode na raiz do repo: `./autopilot/install.sh` — pergunta **Projeto (diretóri
 
 ## Início rápido
 
-1. **Um comando (padrão):** No chat do Cursor, digite `/launch TSK-123` (substitua pelo ID da tarefa JIRA).  
+1. **Um comando (padrão):** No chat do Cursor, digite `/ae-autopilot:launch TSK-123` (substitua pelo ID da tarefa JIRA).  
    O agente roda: pull → plan → execute-plan → review → pr.
 
 2. **Passo a passo:**  
-   - `/pull TSK-123` — Busca tarefa, sincroniza branch de release, cria branch `TSK-123`.  
-   - `/plan` — Classifica (L0–L3), gera plano se necessário.  
-   - `/execute-plan` — Executa o trabalho (use `--phase=1` ou `--all` para L3).  
-   - `/review` — Roda dbt build/testes; bloqueia PR se houver falhas.  
-   - `/pr` — Abre PR (template); o Autopilot nunca faz merge.
+   - `/ae-autopilot:pull TSK-123` — Busca tarefa, sincroniza branch de release, cria branch `TSK-123`.  
+   - `/ae-autopilot:plan` — Classifica (L0–L3), gera plano se necessário.  
+   - `/ae-autopilot:execute-plan` — Executa o trabalho (use `--phase=1` ou `--all` para L3).  
+   - `/ae-autopilot:review` — Roda dbt build/testes; bloqueia PR se houver falhas.  
+   - `/ae-autopilot:pr` — Abre PR (template); o Autopilot nunca faz merge.
 
-3. **Config (onboarding):** `/setup` — Cria/atualiza `.autopilot/config.json` com nome, email, revisor(es) do PR, label do time, projeto/board JIRA e se, após abrir o PR, deve perguntar se move a tarefa para Review e comenta no JIRA. **Nome e email** podem ser preenchidos automaticamente a partir do **gh** (GitHub CLI), do **git config** ou do **GitHub MCP**, se disponíveis. Rode uma vez (ou quando mudar).
+3. **Config (onboarding):** `/ae-autopilot:setup` — Cria/atualiza `.autopilot/config.json` com nome, email, revisor(es) do PR, label do time, projeto/board JIRA e se, após abrir o PR, deve perguntar se move a tarefa para Review e comenta no JIRA. **Nome e email** podem ser preenchidos automaticamente a partir do **gh** (GitHub CLI), do **git config** ou do **GitHub MCP**, se disponíveis. Rode uma vez (ou quando mudar).
 
-4. **Ajuda:** `/help` — Mostra a referência de comandos.
+4. **Ajuda:** `/ae-autopilot:help` — Mostra a referência de comandos.
 
-**Guia mínimo para o time:** [COMO-INSTALAR.md](COMO-INSTALAR.md) — copiar `.cursor/` → abrir no Cursor → `/setup` → `/launch TSK-XXX`.
+**Guia mínimo para o time:** [COMO-INSTALAR.md](COMO-INSTALAR.md) — copiar `.cursor/` → abrir no Cursor → `/ae-autopilot:setup` → `/ae-autopilot:launch TSK-XXX`.
 
 ---
 
@@ -63,7 +63,7 @@ Rode na raiz do repo: `./autopilot/install.sh` — pergunta **Projeto (diretóri
 
 | Pasta      | Conteúdo |
 |------------|----------|
-| `commands/` | `setup`, `pull`, `plan`, `execute-plan`, `review`, `pr`, `launch`, `help` — comandos slash. |
+| `commands/` | `ae-autopilot:setup`, `ae-autopilot:pull`, `ae-autopilot:plan`, `ae-autopilot:execute-plan`, `ae-autopilot:review`, `ae-autopilot:pr`, `ae-autopilot:launch`, `ae-autopilot:help` — comandos slash. |
 | `agents/`   | `classifier`, `planner`, `executor`, `verifier` — subagentes que o Agent pode delegar. |
 | `skills/`   | `task-pull`, `classification`, `dbt-validate`, `pr-template` — skills reutilizáveis para tarefa, classificação, validação, PR. |
 | `rules/`    | `autopilot.mdc` — guardrails (sem `git add .`, uma tarefa uma branch, PR é contrato, nunca merge); aplicado ao editar SQL/models ou `.autopilot/`. |
@@ -74,10 +74,10 @@ Todos os comandos e skills referenciam **@docs** para a spec completa (princípi
 
 ## Config (contexto do usuário)
 
-O **`.autopilot/config.json`** guarda contexto de onboarding (nome, email, revisor do PR, label do time, JIRA). É criado/atualizado pelo comando **`/setup`**. Campos principais:
+O **`.autopilot/config.json`** guarda contexto de onboarding (nome, email, revisor do PR, label do time, JIRA). É criado/atualizado pelo comando **`/ae-autopilot:setup`**. Campos principais:
 
-- **user.name**, **user.email** — usados em commits (e em `/pull` para configurar git no repo).
-- **pr.default_reviewers**, **pr.team_label** — usados em `/pr` (revisores e label).
+- **user.name**, **user.email** — usados em commits (e em `/ae-autopilot:pull` para configurar git no repo).
+- **pr.default_reviewers**, **pr.team_label** — usados em `/ae-autopilot:pr` (revisores e label).
 - **jira.project_key**, **jira.board_id**, **jira.review_status** — para referência; **jira.comment_after_pr** — se após abrir o PR devemos perguntar se move a tarefa para Review e comenta no JIRA (resumo + link do PR em PT-BR).
 
 Exemplo de schema: **`autopilot/config.example.json`** no repo. Se não quiser versionar dados pessoais, adicione `.autopilot/config.json` ao `.gitignore`.
@@ -88,7 +88,7 @@ Exemplo de schema: **`autopilot/config.example.json`** no repo. Se não quiser v
 
 ## Template de PR, guia de SQL e outros guias
 
-**Ficam no repo do seu projeto dbt**, não neste kit. O Autopilot lê do workspace quando você roda `/pr` ou `/review`. Coloque no repo dbt, por exemplo:
+**Ficam no repo do seu projeto dbt**, não neste kit. O Autopilot lê do workspace quando você roda `/ae-autopilot:pr` ou `/ae-autopilot:review`. Coloque no repo dbt, por exemplo:
 
 - **Template de PR:** `.github/PULL_REQUEST_TEMPLATE.md` ou `docs/pr-template.md`
 - **Guia de estilo SQL:** `docs/sql-style.md` (ou similar)
@@ -111,7 +111,7 @@ Se existirem, o agente usa; se não, usa a estrutura padrão.
 
 O Autopilot escreve em `.autopilot/` (crie se não existir):
 
-- `config.json` — Criado/atualizado por `/setup` (nome, email, revisor, label, JIRA). Opcional; muitas vezes no `.gitignore`.
+- `config.json` — Criado/atualizado por `/ae-autopilot:setup` (nome, email, revisor, label, JIRA). Opcional; muitas vezes no `.gitignore`.
 - `task.json` — Após pull (metadados da tarefa).
 - `classification.json` — Após plan (L0–L3, rationale).
 - `state.json` — Progresso, commits, resumo, estágio.
@@ -124,8 +124,8 @@ Adicione `.autopilot/` (ou só `.autopilot/config.json`) ao `.gitignore` se pref
 ## Checklist de onboarding (para o time)
 
 - [ ] Copiar `autopilot/.cursor/` para a raiz do projeto dbt.
-- [ ] No Cursor, abrir o projeto dbt e digitar `/help` para confirmar que os comandos aparecem.
-- [ ] Rodar **`/setup`** para criar `.autopilot/config.json` (nome, email, revisor, label, JIRA). Ver `config.example.json` no repo.
+- [ ] No Cursor, abrir o projeto dbt e digitar `/ae-autopilot:help` para confirmar que os comandos aparecem.
+- [ ] Rodar **`/ae-autopilot:setup`** para criar `.autopilot/config.json` (nome, email, revisor, label, JIRA). Ver `config.example.json` no repo.
 - [ ] Anexar **@docs** (pasta `docs/` do repo) no chat ao usar o Autopilot para o agente ter a spec.
-- [ ] Rodar `/launch TSK-XXX` uma vez com uma tarefa real ou de teste para validar o fluxo.
+- [ ] Rodar `/ae-autopilot:launch TSK-XXX` uma vez com uma tarefa real ou de teste para validar o fluxo.
 - [ ] Garantir que JIRA (ou entrada manual de tarefa), Git e dbt estão disponíveis no ambiente.

@@ -28,4 +28,4 @@ The user may append `--phase=N` or `--all` for L3. Anything after the command na
    Update `.autopilot/state.json`: stage "execute-plan", completed_phases (if L3), summary.what_was_done.
 
 6. **Reply**  
-   Summarize what was done and next: `/review`.
+   Summarize what was done and next: `/ae-autopilot:review`.

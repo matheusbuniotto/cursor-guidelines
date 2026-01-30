@@ -24,4 +24,4 @@ Run validations and quality checks. Review failures **block** PR creation.
    Update `.autopilot/state.json`: stage "review", review_status: "passed" (or "failed" with reason).
 
 5. **Reply**  
-   Report pass/fail. If passed, next: `/pr`. If failed, list what to fix.
+   Report pass/fail. If passed, next: `/ae-autopilot:pr`. If failed, list what to fix.

@@ -9,7 +9,7 @@ Create the PR using gh CLI or GitHub API/MCP. **Autopilot never merges.** Human 
 ## Steps
 
 1. **Preconditions**  
-   Review stage must be passed. If not, tell user to run `/review` first.
+   Review stage must be passed. If not, tell user to run `/ae-autopilot:review` first.
 
 2. **Load config**  
    If `.autopilot/config.json` exists, read `pr.default_reviewers`, `pr.team_label`, `jira.review_status`, `jira.comment_after_pr`. Use them below.
